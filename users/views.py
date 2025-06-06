@@ -3,12 +3,16 @@ from users.serializers import RegisterStepOneSerializer,RegisterStepTwoSerialize
 LoginSerializer
 from users.models import CustomUser
 
+from drf_yasg.utils import swagger_auto_schema
+
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
 # Create your views here.
 class RegisterStepOneAPIView(APIView):
+
+    @swagger_auto_schema(request_body=RegisterStepOneSerializer)
     def post(self,request):
         serializer = RegisterStepOneSerializer(data=request.data)
         if serializer.is_valid():
@@ -24,6 +28,8 @@ class RegisterStepOneAPIView(APIView):
     
 
 class RegisterStepTwoAPIView(APIView):
+
+    @swagger_auto_schema(request_body=RegisterStepTwoSerializer)
     def patch(self,request,user_id):
         user = get_object_or_404(CustomUser,id=user_id)
         serializer = RegisterStepTwoSerializer(user,data=request.data,partial=True)
@@ -39,6 +45,8 @@ class RegisterStepTwoAPIView(APIView):
     
 
 class RegisterStepThreeAPIView(APIView):
+
+    @swagger_auto_schema(request_body=RegisterStepThreeSerializer)
     def patch(self,request,user_id):
         user = get_object_or_404(CustomUser,id=user_id)
         serializer = RegisterStepThreeSerializer(user,data=request.data,partial=True,context={'request': request})
@@ -54,15 +62,17 @@ class RegisterStepThreeAPIView(APIView):
     
 
 class LoginAPIView(APIView):
-    def post(self,request):
+
+    @swagger_auto_schema(request_body=LoginSerializer)
+    def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
             response = {
-                'code':200,
-                "message":"Muvaffaqiyatli tizimga kirildi",
-                'data':serializer.data
+                'code': 200,
+                "message": "Muvaffaqiyatli tizimga kirildi",
+                'data': serializer.validated_data
             }
-            return Response(response,status=status.HTTP_200_OK)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     

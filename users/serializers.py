@@ -46,29 +46,30 @@ class RegisterStepThreeSerializer(serializers.ModelSerializer):
             })
         return data
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField(max_length=50,required=True,write_only=True)
-    
-    def validate(self,data):
+    password = serializers.CharField(max_length=50, required=True, write_only=True)
+
+    def validate(self, data):
         email = data.get("email")
         password = data.get("password")
 
         try:
-            user = CustomUser.objects.filter(email=email)
+            user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError("Bunday foydalanuvchi mavjud emas!")
-        
+
         if not user.check_password(password):
             raise serializers.ValidationError("Parol noto'g'ri")
-        
+
         refresh = RefreshToken.for_user(user)
 
         return {
-            'email':user.email,
-            "access_token":str(refresh.access_token),
-            "refresh_token":str(refresh)
+            'email': user.email,
+            "access_token": str(refresh.access_token),
+            "refresh_token": str(refresh),
+            "full_name": user.full_name,
+            "user_type": user.user_type,
         }
-        
         
         
