@@ -1,2 +1,5 @@
 .env
 eeduenv
+
+__pycache__/
+*.pyc
