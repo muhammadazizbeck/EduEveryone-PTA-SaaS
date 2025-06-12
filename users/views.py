@@ -4,7 +4,7 @@ LoginSerializer
 from users.models import CustomUser
 
 from drf_yasg.utils import swagger_auto_schema
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,18 +13,24 @@ from rest_framework.response import Response
 class RegisterStepOneAPIView(APIView):
 
     @swagger_auto_schema(request_body=RegisterStepOneSerializer)
-    def post(self,request):
+    def post(self, request):
         serializer = RegisterStepOneSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+
+            # JWT token generatsiya qilish
+            refresh = RefreshToken.for_user(user)
+
             response = {
-                "code":201,
-                'message':"Ro'yhatdan o'tishning birinchi bosqichi yakunlandi",
-                'user_id':user.id,
-                "data":serializer.data
+                "code": 201,
+                "message": "Ro'yhatdan o'tishning birinchi bosqichi yakunlandi",
+                "user_id": user.id,
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "data": serializer.data
             }
-            return Response(response,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 class RegisterStepTwoAPIView(APIView):
