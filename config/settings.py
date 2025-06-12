@@ -73,17 +73,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Agar frontend React bo‘lsa
+    "http://localhost:5500",     # Live Server (JS frontend)
+    "http://localhost:3000",     # React (agar kerak bo‘lsa)
+    "http://127.0.0.1:5500",     # Ba'zida shu IP ham ishlatiladi
     "http://127.0.0.1:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5500",     # Live Server (JS frontend)
+    "http://localhost:3000",     # React (agar kerak bo‘lsa)
+    "http://127.0.0.1:5500",     # Ba'zida shu IP ham ishlatiladi
     "http://127.0.0.1:3000",
 ]
-
+it 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
