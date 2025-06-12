@@ -87,7 +87,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",     # Ba'zida shu IP ham ishlatiladi
     "http://127.0.0.1:3000",
 ]
-it 
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
