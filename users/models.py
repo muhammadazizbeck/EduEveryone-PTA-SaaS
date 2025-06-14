@@ -28,13 +28,11 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     USER_TYPE_CHOISES = (
         ('student',"O'quvchi"),
         ("teacher","O'qituvchi"),
-        ("guardian","Nazoratchi (ota-ona)"),
     )
 
     DISABILITY_TYPE_CHOISES = (
-        ("A1","Ko'zi ojiz"),
-        ("A2","Eshitmaydigan"),
-        ("A3","Jismoniy nogiron"),
+        ("A1","Eshitmaydigan"),
+        ("A2","Jismoniy nogiron"),
     )
 
     username = None
