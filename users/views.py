@@ -1,12 +1,12 @@
 from django.shortcuts import render,get_object_or_404
 from users.serializers import RegisterStepOneSerializer,RegisterStepTwoSerializer,RegisterStepThreeSerializer,\
-LoginSerializer
+LoginSerializer,PasswordChangeSerializer,ProfileSerializer
 from users.models import CustomUser
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status,permissions
 from rest_framework.response import Response
 
 # Create your views here.
@@ -80,5 +80,51 @@ class LoginAPIView(APIView):
             }
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class PasswordChangeAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(request_body=PasswordChangeSerializer)
+    def post(self,request):
+        serializer = PasswordChangeSerializer(data=request.data,context={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            response = {
+                'code':200,
+                "message":"Parol muvaffaqiyatli o'zgartirildi"
+            }
+            return Response(response,status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class ProfileAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(
+        responses={200: ProfileSerializer()}
+    )
+    def get(self,request):
+        serializer = ProfileSerializer(request.user)
+        response = {
+            'code':200,
+            "data":serializer.data
+        }
+        return Response(response,status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(request_body=ProfileSerializer)
+    def patch(self,request):
+        serializer = ProfileSerializer(request.data,request.user,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            response = {
+                'code':200,
+                "data":serializer.data
+            }
+            return Response(response,status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+        
+
+
+
 
     

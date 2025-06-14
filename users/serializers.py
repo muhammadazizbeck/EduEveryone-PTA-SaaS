@@ -71,5 +71,36 @@ class LoginSerializer(serializers.Serializer):
             "full_name": user.full_name,
             "user_type": user.user_type,
         }
-        
+
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True,max_length=50,required=True)
+    new_password = serializers.CharField(write_only=True,required=True,max_length=50)
+    confirm_new_password = serializers.CharField(write_only=True,required=True,max_length=50)
+
+    def validate(self,data):
+        if data["new_password"]!=data['confirm_new_password']:
+            raise serializers.ValidationError("Yangi parollar mos emas!")
+        return data
+    
+    def validate_old_password(self,attrs):
+        user = self.context['request'].user
+        if not user.check_password(attrs):
+            raise serializers.ValidationError("Eski parol noto'g'ri kiritilgan")
+        return attrs
+    
+    def save(self,**kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
+        user.save()
+        return user
+    
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ("id","email","full_name")
+        read_only_fields = ("id","email")
+
+            
+    
         
