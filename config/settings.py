@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     #internal
     "users",
+    "courses",
     "interface",
 
     #external

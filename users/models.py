@@ -51,4 +51,14 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"
+    
+    @property
+    def is_teacher(self) -> bool:
+        """Foydalanuvchi o‘qituvchimi?"""
+        return self.user_type == "teacher"
+
+    @property
+    def is_student(self) -> bool:
+        """Foydalanuvchi o‘quvchimi?"""
+        return self.user_type == "student"
 
