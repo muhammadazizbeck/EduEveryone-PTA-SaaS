@@ -6,8 +6,8 @@ from rest_framework.response import Response
 
 from drf_yasg.utils import swagger_auto_schema
 
-from courses.models import Course
-from courses.serializers import CourseListSerializer,CourseDetailSerializer
+from courses.models import Course,Submission,Lesson
+from courses.serializers import CourseListSerializer,CourseDetailSerializer,LessonDetailSerializer
 # Create your views here.
 
 class CourseListAPIView(APIView):
@@ -39,5 +39,21 @@ class CourseDetailAPIView(APIView):
             'data':serializer.data
         }
         return Response(response,status=status.HTTP_200_OK)
+    
+class LessonDetailAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(
+        responses={200:LessonDetailSerializer()}
+    )
+    def get(self,request,id):
+        lesson = Lesson.objects.get(id=id)
+        serializer = LessonDetailSerializer(lesson,conttext={'request':request})
+        response = {
+            'code':200,
+            "data":serializer.data
+        }
+        return Response(response,status=status.HTTP_200_OK)
+    
     
     
