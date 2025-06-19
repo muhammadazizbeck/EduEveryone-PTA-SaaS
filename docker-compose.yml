@@ -42,8 +42,6 @@ services:
     volumes:
       - certbot_www:/var/www/certbot
       - certbot_letsencrypt:/etc/letsencrypt
-    entrypoint: /bin/sh -c
-    command: "sleep infinity"
     networks:
       - app-net
 
