@@ -73,6 +73,7 @@ class LoginSerializer(serializers.Serializer):
             "refresh_token": str(refresh),
             "full_name": user.full_name,
             "user_type": user.user_type,
+            "disability_type":user.disability_type
         }
 
 class PasswordChangeSerializer(serializers.Serializer):
