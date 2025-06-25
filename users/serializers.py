@@ -39,11 +39,14 @@ class RegisterStepThreeSerializer(serializers.ModelSerializer):
         fields = ['disability_type']
 
     def validate(self, data):
-        user = self.context['request'].user  
-        if user.user_type == 'student' and not data.get('disability_type'):
+        user_id = self.context['view'].kwargs.get('pk')  # URL'dan pk ni olamiz
+        user = CustomUser.objects.filter(pk=user_id).first()
+
+        if user and user.user_type == 'student' and not data.get('disability_type'):
             raise serializers.ValidationError({
                 'disability_type': "O'quvchilar uchun nogironlik turini tanlash majburiy."
             })
+
         return data
 
 class LoginSerializer(serializers.Serializer):
