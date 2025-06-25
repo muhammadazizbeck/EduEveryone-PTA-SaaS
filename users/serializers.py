@@ -2,6 +2,7 @@ from rest_framework import serializers
 from users.models import CustomUser
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from users.exceptions import InvalidPasswordException
 
 class RegisterStepOneSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(max_length=50,required=True,write_only=True)
@@ -61,9 +62,9 @@ class LoginSerializer(serializers.Serializer):
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError(detail={"User": ["Bunday foydalanuvchi mavjud emas"]},code=status.HTTP_400_BAD_REQUEST)
-
+        
         if not user.check_password(password):
-            raise serializers.ValidationError(detail={"parol": ["Parol noto'g'ri"]},code=status.HTTP_401_UNAUTHORIZED)
+            raise InvalidPasswordException()
 
         refresh = RefreshToken.for_user(user)
 
