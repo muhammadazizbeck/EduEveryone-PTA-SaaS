@@ -21,7 +21,8 @@ class PasswordMismatchException(APIException):
         if detail is None:
             detail = {"parol": ["Parollar mos emas tekshirib qaytadan kiriting"]}
         detail["status_code"] = int(self.status_code)
-        super().__init__(detail=detail)
+
+        self.detail = detail
     
 class EmailAlreadyExistsException(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
@@ -31,7 +32,8 @@ class EmailAlreadyExistsException(APIException):
         if detail is None:
             detail = {"User": ["Bu email allaqachon ro'yhatdan o'tkan"]}
         detail["status_code"] = int(self.status_code)
-        super().__init__(detail=detail)
+
+        self.detail = detail
     
 class DisabilityRequiredException(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
@@ -41,8 +43,8 @@ class DisabilityRequiredException(APIException):
         if detail is None:
             detail = {"Error": ["O'quvchilar uchun nogironlikni tanlash majburiy"]}
         detail["status_code"] = int(self.status_code)
-        super().__init__(detail=detail)
-    
+
+        self.detail = detail
 class UserNotFoundException(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_code = 'user_not_found'
@@ -53,7 +55,8 @@ class UserNotFoundException(APIException):
                 "User": ["Bunday foydalanuvchi mavjud emas"]
             }
         detail["status_code"] = int(self.status_code)
-        super().__init__(detail=detail)
+
+        self.detail = detail
     
 class NewPasswordMismatchException(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
@@ -65,7 +68,8 @@ class NewPasswordMismatchException(APIException):
                 "error": "Yangi parollar mos emas!"
             }
         detail["status_code"] = int(self.status_code)
-        super().__init__(detail=detail)
+
+        self.detail = detail
 
 class OldPasswordIncorrectException(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
@@ -77,4 +81,5 @@ class OldPasswordIncorrectException(APIException):
                 "error": "Eski parol noto'g'ri kiritilgan"
             }
         detail["status_code"] = int(self.status_code)
-        super().__init__(detail=detail)
+
+        self.detail = detail
