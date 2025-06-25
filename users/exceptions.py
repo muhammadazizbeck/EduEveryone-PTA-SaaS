@@ -9,7 +9,7 @@ class InvalidPasswordException(APIException):
         if detail is None:
             detail = {"parol": ["Parol noto'g'ri"]}
 
-        detail["status_code"] = int(self.status_code)
+        detail["status_code"] = self.status_code
         super().__init__(detail=detail)
 
 class PasswordMismatchException(APIException):
