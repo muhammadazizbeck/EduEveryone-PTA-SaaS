@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.models import CustomUser
+from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class RegisterStepOneSerializer(serializers.ModelSerializer):
@@ -12,12 +13,12 @@ class RegisterStepOneSerializer(serializers.ModelSerializer):
 
     def validate(self,data):
         if data['password1'] != data['password2']:
-            raise serializers.ValidationError("Parollar mos emas.Iltimos tekshirib qaytadan kiriting")
+            raise serializers.ValidationError(detail={"parol": ["Parollar mos emas tekshirib qaytadan kiriting"]},code=status.HTTP_400_BAD_REQUEST)
         return data
     
     def validate_email(self, value):
         if CustomUser.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Bu email allaqachon ro'yxatdan o'tgan.")
+            raise serializers.ValidationError(detail={"User": ["Bu email allaqachon ro'yhatdan o'tkan"]},code=status.HTTP_400_BAD_REQUEST)
         return value
     
     def create(self, validated_data):
@@ -59,10 +60,10 @@ class LoginSerializer(serializers.Serializer):
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
-            raise serializers.ValidationError("Bunday foydalanuvchi mavjud emas!")
+            raise serializers.ValidationError(detail={"User": ["Bunday foydalanuvchi mavjud emas"]},code=status.HTTP_400_BAD_REQUEST)
 
         if not user.check_password(password):
-            raise serializers.ValidationError("Parol noto'g'ri")
+            raise serializers.ValidationError(detail={"parol": ["Parol noto'g'ri"]},code=status.HTTP_401_UNAUTHORIZED)
 
         refresh = RefreshToken.for_user(user)
 
