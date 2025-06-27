@@ -83,3 +83,5 @@ class OldPasswordIncorrectException(APIException):
         detail["status_code"] = int(self.status_code)
 
         self.detail = detail
+
+#permission denied
