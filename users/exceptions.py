@@ -85,3 +85,4 @@ class OldPasswordIncorrectException(APIException):
         self.detail = detail
 
 #permission denied
+#nopermission
