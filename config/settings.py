@@ -85,6 +85,11 @@ CORS_ALLOWED_ORIGINS = [
     'https://164.92.64.138',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://edueveryone.uz",
+    "https://www.edueveryone.uz",
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 
