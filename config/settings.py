@@ -14,7 +14,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG",default=False,cast=bool)
 
-ALLOWED_HOSTS = ['164.92.64.138', 'localhost', '127.0.0.1','edueveryone.uz']
+ALLOWED_HOSTS = ['164.92.64.138', 'localhost', '127.0.0.1','edueveryone.uz','www.edueveryone.uz']
 
 
 # Application definition
@@ -88,7 +88,15 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://edueveryone.uz",
     "https://www.edueveryone.uz",
+    "https://164.92.64.138",
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 
 CORS_ALLOW_CREDENTIALS = True
 
